@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi, {{ current_user.username }}</h1>
+    <div>
+        <p>Your incomes:</p>
+        {% for income in incomes %}
+            {% include '_income.html' %}
+        {% endfor %}
+    </div>
+    <div><p>Sum: {{ sum_incomes }}</p></div>
+    <div><p>Sum: {{ current_user.total_income() }}</p></div>
+{% endblock %}
