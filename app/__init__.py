@@ -11,4 +11,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 
-from app import routes, models, errors
+from app.errors import bp as errors_bp
+app.register_blueprint(errors_bp)
+
+from app import routes, models
