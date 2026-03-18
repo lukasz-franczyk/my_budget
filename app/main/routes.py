@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request
-from app import app ,db
+from app import db
 import sqlalchemy as sa
 from flask_login import current_user, login_required
 from app.main.forms import IncomesForm
