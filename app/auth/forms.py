@@ -33,9 +33,3 @@ class RegistrationForm(FlaskForm):
         ))
         if user is not None:
             raise ValidationError('Please use a different email address.')
-
-class IncomesForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    amount = StringField('Amount', validators=[DataRequired()])
-    income_date  = StringField('Income date : YYYY-MM-DD')
-    submit = SubmitField('Add income')
