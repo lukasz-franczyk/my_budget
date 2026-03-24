@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, url_for, request
 from app import db
 import sqlalchemy as sa
 from flask_login import current_user, login_required
-from app.main.forms import IncomesForm
-from app.models import User, Income
+from app.main.forms import IncomesForm, ExpensesForm
+from app.models import User, Income, Expense
 from app.utils import str_to_datetime
 from app.main import bp
 
@@ -36,3 +36,17 @@ def incomes():
         return redirect(url_for('main.incomes'))
     return render_template('incomes.html', title='Incomes', form=form)
 
+@bp.route('/expenses', methods=['GET', 'POST'])
+@login_required
+def expenses():
+    form = ExpensesForm()
+    if form.validate_on_submit():
+        date_obj = str_to_datetime(form.expense_date.data)
+        expense = Expense(name=form.name.data, amount=form.amount.data, income_date=date_obj,
+                        user_id=current_user.id)
+
+        db.session.add(expense)
+        db.session.commit()
+        flash('Expense added!')
+        return redirect(url_for('main.expenses'))
+    return render_template('expenses.html', title='Expenses', form=form)

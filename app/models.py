@@ -25,6 +25,8 @@ class User(UserMixin, db.Model):
 
     incomes: so.WriteOnlyMapped['Income'] = so.relationship(back_populates='recipient')
 
+    expenses: so.WriteOnlyMapped['Expense'] = so.relationship(back_populates='spender')
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -53,3 +55,15 @@ class Income(db.Model):
     def __repr__(self):
         return '<Income {} - {}>'.format(self.name, self.amount)
 
+class Expense(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    name: so.Mapped[str] = so.mapped_column(sa.String(64))
+    amount: so.Mapped[decimal.Decimal] = so.mapped_column(sa.DECIMAL(10, 2))
+    expense_date: so.Mapped[Optional[datetime]] = so.mapped_column(sa.Date())
+    timestamp: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
+
+    spender: so.Mapped[User] = so.relationship(back_populates='expenses')
+
+    def __repr__(self):
+        return '<Expense {} - {}>'.format(self.name, self.amount)

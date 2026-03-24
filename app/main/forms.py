@@ -11,3 +11,9 @@ class IncomesForm(FlaskForm):
     amount = StringField('Amount', validators=[DataRequired()])
     income_date  = StringField('Income date : YYYY-MM-DD')
     submit = SubmitField('Add income')
+
+class ExpensesForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    amount = StringField('Amount', validators=[DataRequired()])
+    expense_date  = StringField('Expense date : YYYY-MM-DD')
+    submit = SubmitField('Add expense')

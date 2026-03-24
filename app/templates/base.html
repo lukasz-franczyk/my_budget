@@ -15,6 +15,7 @@
         <a href="{{ url_for('auth.login') }}">Login</a>
         {% else %}
         <a href="{{ url_for('main.incomes') }}">Incomes</a>
+        <a href="{{ url_for('main.expenses') }}">Expenses</a>
         <a href="{{ url_for('auth.logout') }}">Logout</a>
         {% endif %}
     </div>
