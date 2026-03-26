@@ -27,5 +27,10 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
-
+    <div class="container">
+        <p>Your expenses:</p>
+        {% for expense in expenses %}
+            {% include '_expense.html' %}
+        {% endfor %}
+    </div>
 {% endblock %}

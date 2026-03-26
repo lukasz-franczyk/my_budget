@@ -3,15 +3,10 @@ from datetime import datetime, timezone
 from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from sqlalchemy.testing.pickleable import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login
 from flask_login import UserMixin
-
-@login.user_loader
-def load_user(user_id: int) -> User:
-    return db.session.get(User, user_id)
 
 class User(UserMixin, db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -24,7 +19,6 @@ class User(UserMixin, db.Model):
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
 
     incomes: so.WriteOnlyMapped['Income'] = so.relationship(back_populates='recipient')
-
     expenses: so.WriteOnlyMapped['Expense'] = so.relationship(back_populates='spender')
 
     def __repr__(self):
@@ -42,6 +36,11 @@ class User(UserMixin, db.Model):
             .where(Income.user_id == self.id)
         ) or decimal.Decimal('0.00')
 
+
+@login.user_loader
+def load_user(user_id: int) -> User:
+    return db.session.get(User, user_id)
+
 class Income(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     name: so.Mapped[str] = so.mapped_column(sa.String(64))
@@ -58,7 +57,7 @@ class Income(db.Model):
 class Expense(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     name: so.Mapped[str] = so.mapped_column(sa.String(64))
-    amount: so.Mapped[decimal.Decimal] = so.mapped_column(sa.DECIMAL(10, 2))
+    amount: so.Mapped[decimal.Decimal] = so.mapped_column(sa.DECIMAL(10,2))
     expense_date: so.Mapped[Optional[datetime]] = so.mapped_column(sa.Date())
     timestamp: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)

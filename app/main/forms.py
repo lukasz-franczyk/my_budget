@@ -12,7 +12,7 @@ class IncomesForm(FlaskForm):
     income_date  = StringField('Income date : YYYY-MM-DD')
     submit = SubmitField('Add income')
 
-class ExpensesForm(FlaskForm):
+class ExpenseForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     amount = StringField('Amount', validators=[DataRequired()])
     expense_date  = StringField('Expense date : YYYY-MM-DD')
